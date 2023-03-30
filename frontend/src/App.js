@@ -27,17 +27,22 @@ function App() {
     });
   };
   const trainModel = async (e) => {
+    const {epochs, optimizer,loss,activation,hidden_size} = formData;
+    if(!epochs || !optimizer || !loss || !activation || !hidden_size){
+      toast.warn("please fill all the required fields 😵")
+      return;
+    }
     //remove previous results
     setTrainRes(null);
     //call train endpoint
     const res = await toast.promise(
       train({
         model_type: isXOR ? "xor" : "switch",
-        opt: formData.optimizer,
-        loss_func: formData.loss,
-        activation: formData.activation,
-        hidden_size: formData.hidden_size,
-        epochs: formData.epochs,
+        opt: optimizer,
+        loss_func: loss,
+        activation: activation,
+        hidden_size: hidden_size,
+        epochs: epochs,
       }),
       {
         pending: "Request in progress",
