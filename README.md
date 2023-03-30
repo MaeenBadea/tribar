@@ -46,6 +46,7 @@ The following software frameworks were used to build this project:
 ## Deployment
 
 The project is deployed on Github pages at the following URL:
+
 `https://maeenbadea.github.io/tribar/`
 
 >Note: the api is deployed on azure
