@@ -3,7 +3,7 @@ import Input from "./components/Input";
 import Select from "./components/Select";
 import Button from "./components/Button";
 import { useState } from "react";
-import { train } from "./api/FlaskApi";
+import { predict, train } from "./api/FlaskApi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -16,6 +16,9 @@ function App() {
     optimizer: "",
     loss: "",
   });
+  const [trainRes, setTrainRes] = useState(null);
+  const [X_pred, setXPred] = useState([]);
+  const [predictions, setPredictions] = useState([]);
 
   const onChange = (e) => {
     setFormData({
@@ -24,7 +27,10 @@ function App() {
     });
   };
   const trainModel = async (e) => {
-    const response = await toast.promise(
+    //remove previous results
+    setTrainRes(null);
+    //call train endpoint
+    const res = await toast.promise(
       train({
         model_type: isXOR ? "xor" : "switch",
         opt: formData.optimizer,
@@ -36,28 +42,41 @@ function App() {
       {
         pending: "Request in progress",
         success: "Model trained 👌",
-        error: "Opps!Sth wrong happend 🤯",
+        error: "Opps!Something wrong happend 🤯",
       }
     );
-    console.log(response);
+    console.log(res.data);
+    setTrainRes(res.data.data);
+  };
+  const predictInput = async () => {
+    setPredictions([]);
+    const res = await toast.promise(
+      predict({
+        model_type: isXOR ? "xor" : "switch",
+        x_preds: X_pred,
+      }),
+      {
+        pending: "Request in progress",
+        success: "Result fetched successfully 👌",
+        error: "Opps!Something wrong happend 🤯",
+      }
+    );
+    console.log(res);
+    setPredictions(res.data.data);
+  };
+  const addToInput = (val) => {
+    setXPred([...X_pred, val]);
+  };
+  const clearPreds = () => {
+    setXPred([]);
+    setPredictions([]);
   };
   return (
     <div>
-      <ToastContainer
-        position="top-left"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
+      <ToastContainer position="top-left" />
       <header>
         <div className="text-box">
-          <h1 id="title">Tribar Software GmbH</h1>
+          <h1 id="title">Tribar Software GmbH tensorflow task</h1>
           <p id="description">
             Training NN on XOR function &amp; toggle switch circuit
           </p>
@@ -82,7 +101,13 @@ function App() {
                 alignItems: "center",
                 justifyContent: "center",
               }}
-              onChange={(e) => setIsXOR(e.target.value === "xor")}
+              onChange={(e) => {
+                setIsXOR(e.target.value === "xor");
+                //clear some previous states
+                setPredictions([]);
+                setXPred([]);
+                setTrainRes(null);
+              }}
             >
               <input
                 type="radio"
@@ -152,21 +177,44 @@ function App() {
           <div className="btn">
             <button onClick={trainModel}>Train Model</button>
           </div>
+
+          {trainRes && (
+            <>
+              <p id="description">Your model finished Training</p>
+              <p id="description">&bull; Accuracy: {trainRes.acc} </p>
+              <p id="description">&bull; Loss: {trainRes.loss}</p>
+            </>
+          )}
         </div>
       </div>
 
       <div className="text-box">
         <h1 id="title">Inference</h1>
-        <p id="description">Start Predicting with your trained model</p>
+        <p id="description">
+          Start Predicting with your trained {isXOR ? "XOR" : "Switch"} model
+        </p>
+        <p id="description" style={{ fontSize: "15px" }}>
+          ** Note: the last trained model is in use here
+        </p>
 
-        <div className="btns-container">
-          <Button title={"0"}/>
-          <Button title={"0"}/>
-
-          <Button title={"0"}/>
-          <Button title={"0"}/>
-
-        </div>
+        {isXOR ? (
+          <div className="btns-container">
+            {[
+              [0, 0],
+              [0, 1],
+              [1, 0],
+              [1, 1],
+            ].map((txt) => (
+              <Button title={txt} addToInput={addToInput} />
+            ))}
+          </div>
+        ) : (
+          <div className="btns-container">
+            {[0, 1].map((txt) => (
+              <Button title={txt} addToInput={addToInput} />
+            ))}
+          </div>
+        )}
 
         <div className="labels">
           <label id="email-label" for="email">
@@ -175,7 +223,7 @@ function App() {
         </div>
         <div className="input-tab">
           <div className="span-field" type="email" id="email" name="email">
-            1,2,2,001,2
+            {X_pred.join("|")}
           </div>
         </div>
 
@@ -186,12 +234,15 @@ function App() {
         </div>
         <div className="input-tab">
           <div className="span-field" type="email" id="email" name="email">
-            1,0,1,0,1
+            {predictions.join(",")}
           </div>
         </div>
 
         <div className="btn">
-          <button onClick={()=>alert('predict')}>Predict</button>
+          <button onClick={predictInput}>Predict</button>
+          <button onClick={clearPreds} style={{ marginLeft: "1em" }}>
+            clear
+          </button>
         </div>
       </div>
 

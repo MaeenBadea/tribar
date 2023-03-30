@@ -10,7 +10,7 @@ body, html {
 
 body {
   font-size: 1.2em;
-  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(https://img.freepik.com/free-photo/ai-technology-brain-background-digital-transformation-concept_53876-125206.jpg?w=740&t=st=1680126074~exp=1680126674~hmac=a9c67bd931948e51272b50f42ce99cf521002bb657a4034f79bb99b1f82043f3) center no-repeat fixed;
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(https://img.freepik.com/free-photo/3d-science-modern-network-communications-background_1048-12787.jpg?w=740&t=st=1680170136~exp=1680170736~hmac=44f931577d577bc0b94854075888cc0d8283d5b628756b7e7fb1e556719c3270) center no-repeat fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -ms-background-size: cover;
@@ -96,7 +96,8 @@ hr {
 .span-field {
   display: inline-block;
   width: 100%;
-  padding: 5px;
+  height: 2.3em;
+  padding: 10px;
   margin: 18px 0 0 10px;
   border: 1px solid white;
   background-color: rgba(22, 160, 133,0.3);
@@ -105,6 +106,7 @@ hr {
   font-family: inherit;
   font-size: 15px;
   font-weight: bold;
+  overflow-x:scroll ; overflow-y: hidden;
 }
 ::-webkit-input-placeholder {
    font-style: italic;
@@ -169,7 +171,7 @@ footer p {
 
 @media only screen and (max-width: 768px) {
   body{
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(https://img.freepik.com/free-photo/ai-technology-brain-background-digital-transformation-concept_53876-125206.jpg?w=740&t=st=1680126074~exp=1680126674~hmac=a9c67bd931948e51272b50f42ce99cf521002bb657a4034f79bb99b1f82043f3) center no-repeat fixed;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(https://img.freepik.com/free-photo/3d-science-modern-network-communications-background_1048-12787.jpg?w=740&t=st=1680170136~exp=1680170736~hmac=44f931577d577bc0b94854075888cc0d8283d5b628756b7e7fb1e556719c3270) center no-repeat fixed;
   background-size: cover;
 }
   
