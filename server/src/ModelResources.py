@@ -9,7 +9,7 @@ from src.Model import XorModel, SwitchModel
 class Train(Resource):
     parser = reqparse.RequestParser()
 
-    parser.add_argument('type', type=str, required=True,
+    parser.add_argument('model_type', type=str, required=True,
                         help='This field cannot be left blank')
     parser.add_argument('hidden_size', type=int, required=True,
                         help='This field cannot be left blank')
